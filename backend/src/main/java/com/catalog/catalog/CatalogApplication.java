@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CatalogApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CatalogApplication.class, args);System.out.println("Hello wolrd.");
+		SpringApplication.run(CatalogApplication.class, args);
 	}
-
 }

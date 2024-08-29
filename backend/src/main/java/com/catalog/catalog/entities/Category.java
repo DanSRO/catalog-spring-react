@@ -1,22 +1,21 @@
 package com.catalog.catalog.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
+import java.io.Serial;
 import java.io.Serializable;
-//import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Objects;
 
-//@Entity
-//@Table(name = "tb_categories")
+@Entity
+@Table(name = "tb_category")
 public class Category implements Serializable {
+    @Serial
     private static final long serialVersionUID=1L;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
-//    private List<Product> products = new ArrayList<>();
 
     public Category() {
     }
@@ -41,10 +40,6 @@ public class Category implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-  //  public List<Product> getProducts() {
-  //      return products;
-  //  }
 
     @Override
     public boolean equals(Object o) {

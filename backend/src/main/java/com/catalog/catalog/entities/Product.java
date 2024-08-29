@@ -1,9 +1,5 @@
 package com.catalog.catalog.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import org.springframework.data.annotation.Id;
-
 //@Entity
 //@Table(name = "tb_products")
 public class Product {

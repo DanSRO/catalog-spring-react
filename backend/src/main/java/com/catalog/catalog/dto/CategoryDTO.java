@@ -2,7 +2,12 @@ package com.catalog.catalog.dto;
 
 import com.catalog.catalog.entities.Category;
 
-public class CategoryDTO {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class CategoryDTO implements Serializable {
+    @Serial
+    private static final long serialVersionUID=1L;
 
     private Long id;
     private String name;

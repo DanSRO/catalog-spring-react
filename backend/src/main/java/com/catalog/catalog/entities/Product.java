@@ -1,25 +1,48 @@
 package com.catalog.catalog.entities;
 
-//@Entity
-//@Table(name = "tb_products")
-public class Product {
-    //@Id
+import jakarta.persistence.*;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "tb_product")
+public class Product implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String description;
     private Double price;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant date;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
     private String imgUrl;
 
-    private Category category;
 
-    public Product() {
-    }
 
-    public Product(Long id, String name, String description, Double price, String imgUrl) {
+    @ManyToMany
+    @JoinTable(name = "tb_product_category",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
+
+    public Product() {}
+
+    public Product(Long id, String name, Double price, Instant date,  String description,String imgUrl) {
         this.id = id;
         this.name = name;
-        this.description = description;
         this.price = price;
+        this.date=date;
+        this.description = description;
         this.imgUrl = imgUrl;
     }
 
@@ -61,5 +84,17 @@ public class Product {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public Instant getDate() {
+        return date;
+    }
+
+    public void setDate(Instant date) {
+        this.date = date;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
     }
 }

@@ -1,9 +1,12 @@
 package com.catalog.catalog.services;
 
+import com.catalog.catalog.dto.CategoryDTO;
 import com.catalog.catalog.dto.ProductDTO;
 import com.catalog.catalog.dto.ProductDTO;
+import com.catalog.catalog.entities.Category;
 import com.catalog.catalog.entities.Product;
 import com.catalog.catalog.entities.Product;
+import com.catalog.catalog.repositories.CategoryRepository;
 import com.catalog.catalog.repositories.ProductRepository;
 import com.catalog.catalog.repositories.ProductRepository;
 import com.catalog.catalog.services.exceptions.DataBaseException;
@@ -26,6 +29,9 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAllPaged(PageRequest pageRequest){
         Page<Product> list = repository.findAll(pageRequest);
@@ -43,24 +49,31 @@ public class ProductService {
     @Transactional
     public ProductDTO insert(ProductDTO dto) {
         Product entity = new Product();
+        copyDtoToEntity(dto, entity);
+        entity = repository.save(entity);
+
+        return new ProductDTO(entity);
+    }
+
+    private void copyDtoToEntity(ProductDTO dto, Product entity) {
         entity.setName(dto.getName());
         entity.setPrice(dto.getPrice());
         entity.setDate(dto.getDate());
         entity.setDescription(dto.getDescription());
         entity.setImgUrl(dto.getImgUrl());
-        entity = repository.save(entity);
 
-        return new ProductDTO(entity);
+        entity.getCategories().clear();
+        for(CategoryDTO catDTO : dto.getCategories()){
+            Category category = categoryRepository.getReferenceById(catDTO.getId());
+            entity.getCategories().add(category);
+        }
     }
+
     @Transactional
     public ProductDTO update(Long id,ProductDTO dto) {
         try{
             Product entity = repository.getReferenceById(id);
-            entity.setName(dto.getName());
-            entity.setPrice(dto.getPrice());
-            entity.setDate(dto.getDate());
-            entity.setDescription(dto.getDescription());
-            entity.setImgUrl(dto.getImgUrl());
+            copyDtoToEntity(dto, entity);
             entity = repository.save(entity);
 
             return new ProductDTO(entity);
